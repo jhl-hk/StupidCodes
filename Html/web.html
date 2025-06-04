@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JHL-HK</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Vue Router 4 CDN -->
+  <script src="https://unpkg.com/vue-router@4"></script>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-out',
+            'slide-up': 'slideUp 0.6s ease-out',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(50px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-15px)' }
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 20px rgba(79, 70, 229, 0.3)' },
+              '100%': { boxShadow: '0 0 30px rgba(79, 70, 229, 0.6)' }
+            }
+          },
+          backgroundImage: {
+            'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            'mesh-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          },
+          backdropBlur: {
+            'xs': '2px',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 桌面导航样式 */
+    .nav-link {
+      @apply text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 hover:shadow-md;
+    }
+    
+    .nav-link-active {
+      @apply !text-white !bg-gradient-to-r !from-indigo-600 !to-purple-600 !shadow-lg;
+    }
+    
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    /* 移动端导航样式 */
+    .mobile-nav-link {
+      @apply text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50;
+    }
+    
+    .mobile-nav-link-active {
+      @apply !text-white !bg-gradient-to-r !from-indigo-600 !to-purple-600 !shadow-md;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .animate-slide-up {
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .animate-pulse-slow {
+      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    .animate-glow {
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .backdrop-blur-sm {
+      backdrop-filter: blur(4px);
+    }
+    
+    .backdrop-blur {
+      backdrop-filter: blur(8px);
+    }
+    
+    .backdrop-blur-md {
+      backdrop-filter: blur(12px);
+    }
+    
+    .backdrop-blur-lg {
+      backdrop-filter: blur(16px);
+    }
+    
+    .backdrop-blur-xl {
+      backdrop-filter: blur(24px);
+    }
+    
+    .glass {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      }
+      to {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+      }
+    }
+
+    /* 导航菜单悬停效果 */
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-link:hover::before {
+      left: 100%;
+    }
+
+    /* 响应式优化 */
+    @media (max-width: 768px) {
+      .animate-fade-in {
+        animation-duration: 0.6s;
+      }
+    }
+
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* 加载动画优化 */
+    .loading-spinner {
+      border: 4px solid rgba(99, 102, 241, 0.1);
+      border-top: 4px solid rgb(99, 102, 241);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 技能进度条样式 */
+    .skill-bar {
+      width: 100%;
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dark .skill-bar {
+      background-color: #374151;
+    }
+
+    .skill-progress {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: skill-fill 2s ease-out;
+    }
+
+    @keyframes skill-fill {
+      from {
+        width: 0%;
+      }
+    }
+
+    .skill-item {
+      opacity: 0;
+      animation: skill-appear 0.8s ease-out forwards;
+    }
+
+    .skill-item:nth-child(1) { animation-delay: 0.1s; }
+    .skill-item:nth-child(2) { animation-delay: 0.2s; }
+    .skill-item:nth-child(3) { animation-delay: 0.3s; }
+    .skill-item:nth-child(4) { animation-delay: 0.4s; }
+    .skill-item:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes skill-appear {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* 深色模式平滑过渡 */
+    * {
+      transition-property: background-color, border-color, color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+    }
+
+    /* 确保深色模式下的文本可读性 */
+    .dark {
+      color-scheme: dark;
+    }
+
+    /* 深色模式下的滚动条样式 */
+    .dark::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .dark::-webkit-scrollbar-track {
+      background: #374151;
+    }
+
+    .dark::-webkit-scrollbar-thumb {
+      background: #6b7280;
+      border-radius: 4px;
+    }
+
+    .dark::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-x-hidden transition-colors duration-300">
+  <!-- 现代背景装饰 -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400 to-red-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style="animation-delay: -3s;"></div>
+    <div class="absolute top-40 left-1/2 w-80 h-80 bg-gradient-to-br from-green-400 to-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style="animation-delay: -1.5s;"></div>
+  </div>
+  <div id="app">
+    <div class="container mx-auto px-6 py-12 max-w-7xl relative z-10">
+      <!-- Header with Navigation -->
+      <header class="relative">
+        <!-- 主导航容器 -->
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/40 dark:border-gray-700/40 ring-1 ring-black/5 dark:ring-white/5 overflow-hidden transition-colors duration-300">
+          <div class="px-8 py-6">
+            <!-- Logo和导航区域 -->
+            <div class="flex items-center justify-between">
+              <!-- Logo区域 -->
+              <div class="flex items-center space-x-4">
+                <div class="relative">
+                  <div class="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg ring-2 ring-white/50">
+                    <span class="text-white font-bold text-xl">JHL</span>
+                  </div>
+                  <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg animate-pulse-slow"></div>
+                </div>
+                <div class="hidden md:block">
+                  <h1 class="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
+                    JHL-HK
+                  </h1>
+                  <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Full-Stack Developer</p>
+                </div>
+              </div>
+
+              <!-- 桌面导航 -->
+              <nav class="hidden lg:flex items-center space-x-8">
+                <router-link 
+                  to="/" 
+                  class="nav-link font-semibold px-4 py-2 rounded-xl transition-all duration-300"
+                  active-class="nav-link-active">
+                  <i class="fas fa-home mr-2"></i>Home
+                </router-link>
+                <router-link 
+                  to="/about" 
+                  class="nav-link font-semibold px-4 py-2 rounded-xl transition-all duration-300"
+                  active-class="nav-link-active">
+                  <i class="fas fa-user mr-2"></i>About
+                </router-link>
+                <router-link 
+                  to="/projects" 
+                  class="nav-link px-6 py-3 rounded-xl font-semibold transition-all duration-300 relative overflow-hidden group"
+                  active-class="nav-link-active">
+                  <span class="relative z-10"><i class="fas fa-code mr-2"></i>Projects</span>
+                </router-link>
+                <router-link 
+                  to="/skills" 
+                  class="nav-link px-6 py-3 rounded-xl font-semibold transition-all duration-300 relative overflow-hidden group"
+                  active-class="nav-link-active">
+                  <span class="relative z-10"><i class="fas fa-tools mr-2"></i>Skills</span>
+                </router-link>
+                <router-link 
+                  to="/contact" 
+                  class="nav-link px-6 py-3 rounded-xl font-semibold transition-all duration-300 relative overflow-hidden group"
+                  active-class="nav-link-active">
+                  <span class="relative z-10"><i class="fas fa-envelope mr-2"></i>Contact</span>
+                </router-link>
+                
+                <!-- 深色模式切换按钮 -->
+                <button 
+                  @click="toggleDarkMode"
+                  class="ml-4 p-3 rounded-xl bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-600 transition-all duration-300 shadow-lg hover:shadow-xl group">
+                  <div class="relative w-6 h-6">
+                    <i v-if="!darkMode" class="fas fa-sun text-yellow-500 group-hover:rotate-12 transition-transform duration-300 text-lg"></i>
+                    <i v-if="darkMode" class="fas fa-moon text-blue-400 group-hover:-rotate-12 transition-transform duration-300 text-lg"></i>
+                  </div>
+                </button>
+              </nav>
+
+              <!-- 移动端菜单按钮 -->
+              <div class="lg:hidden flex items-center space-x-2">
+                <!-- 深色模式切换按钮 (移动端) -->
+                <button 
+                  @click="toggleDarkMode"
+                  class="p-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300">
+                  <div class="relative w-5 h-5 flex items-center justify-center">
+                    <i v-if="!darkMode" class="fas fa-sun text-yellow-500"></i>
+                    <i v-if="darkMode" class="fas fa-moon text-blue-400"></i>
+                  </div>
+                </button>
+                
+                <button 
+                  @click="mobileMenuOpen = !mobileMenuOpen"
+                  class="p-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                  :class="{ 'bg-gray-200 dark:bg-gray-600': mobileMenuOpen }">
+                  <div class="w-6 h-6 relative flex items-center justify-center">
+                    <i v-if="!mobileMenuOpen" class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
+                    <i v-if="mobileMenuOpen" class="fas fa-times text-gray-600 dark:text-gray-300"></i>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 移动端导航菜单 -->
+            <div class="lg:hidden mt-6 transition-all duration-300"
+                 :class="mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'">
+              <nav class="space-y-3 bg-gray-50/50 dark:bg-gray-700/50 rounded-2xl p-4">
+                <router-link 
+                  to="/" 
+                  @click="mobileMenuOpen = false"
+                  class="mobile-nav-link block px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  active-class="mobile-nav-link-active">
+                  <i class="fas fa-home mr-3"></i>Home
+                </router-link>
+                <router-link 
+                  to="/about" 
+                  @click="mobileMenuOpen = false"
+                  class="mobile-nav-link block px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  active-class="mobile-nav-link-active">
+                  <i class="fas fa-user mr-3"></i>About
+                </router-link>
+                <router-link 
+                  to="/projects" 
+                  @click="mobileMenuOpen = false"
+                  class="mobile-nav-link block px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  active-class="mobile-nav-link-active">
+                  <i class="fas fa-code mr-3"></i>Projects
+                </router-link>
+                <router-link 
+                  to="/skills" 
+                  @click="mobileMenuOpen = false"
+                  class="mobile-nav-link block px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  active-class="mobile-nav-link-active">
+                  <i class="fas fa-tools mr-3"></i>Skills
+                </router-link>
+                <router-link 
+                  to="/contact" 
+                  @click="mobileMenuOpen = false"
+                  class="mobile-nav-link block px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  active-class="mobile-nav-link-active">
+                  <i class="fas fa-envelope mr-3"></i>Contact
+                </router-link>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Main Content -->
+      <main class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl min-h-96 border border-white/30 dark:border-gray-700/30 ring-1 ring-black/5 dark:ring-white/5 animate-slide-up mt-12 mb-12 transition-colors duration-300">
+        <router-view></router-view>
+      </main>
+
+      <!-- Footer -->
+      <footer class="text-center py-12">
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-gray-700/30 ring-1 ring-black/5 dark:ring-white/5 transition-colors duration-300">
+          <p class="text-gray-600 dark:text-gray-300 mb-2 text-lg">© 2024 JHL-HK. All rights reserved.</p>
+          <div class="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4 opacity-60"></div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+
+    // 定义页面组件
+    const Home = {
+      data() {
+        return {
+          displayedName: '',
+          names: ['Jianyue Hugo Liang', 'JHL-HK'],
+          currentNameIndex: 0,
+          isTyping: true,
+          typingSpeed: 200,
+          pauseDuration: 3000,
+          randomChars: '!@#$%^&*(){}[]|\\<>?.,;:+=~`abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+          isShowingRandom: false
+        }
+      },
+      mounted() {
+        this.startTypingEffect();
+      },
+      methods: {
+        async startTypingEffect() {
+          while (true) {
+            const currentName = this.names[this.currentNameIndex];
+            
+            // 打字效果 - 逐字符显示（带随机符号效果）
+            this.isTyping = true;
+            for (let i = 0; i <= currentName.length; i++) {
+              const correctPart = currentName.substring(0, i);
+              
+              if (i < currentName.length) {
+                // 为当前要显示的字符添加随机符号效果
+                this.isShowingRandom = true;
+                for (let j = 0; j < 3; j++) { // 改回3次随机符号
+                  const nextChar = currentName[i];
+                  const randomChar = nextChar === ' ' ? ' ' : this.getRandomChar();
+                  this.displayedName = correctPart + randomChar;
+                  await this.sleep(80 + Math.random() * 70); // 随机化时间间隔，增加不规律感
+                }
+                this.isShowingRandom = false;
+              }
+              
+              // 显示正确的字符
+              this.displayedName = correctPart;
+              await this.sleep(this.typingSpeed);
+            }
+            
+            // 暂停显示完整名字
+            await this.sleep(this.pauseDuration);
+            
+            // 删除效果 - 逐字符删除
+            this.isTyping = false;
+            for (let i = currentName.length; i >= 0; i--) {
+              this.displayedName = currentName.substring(0, i);
+              await this.sleep(50); // 删除速度比打字快一些
+            }
+            
+            // 切换到下一个名字
+            this.currentNameIndex = (this.currentNameIndex + 1) % this.names.length;
+            
+            // 短暂暂停后开始下一个名字
+            await this.sleep(500);
+          }
+        },
+        getRandomChar() {
+          // 随机选择不同类型的字符，增加视觉趣味
+          const charTypes = [
+            '!@#$%^&*()',
+            '{}[]|\\<>?/',
+          ];
+          const selectedType = charTypes[Math.floor(Math.random() * charTypes.length)];
+          return selectedType[Math.floor(Math.random() * selectedType.length)];
+        },
+        sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        },
+        getLanguageColor(language) {
+          const colors = {
+            'JavaScript': 'bg-yellow-400',
+            'TypeScript': 'bg-blue-500',
+            'Python': 'bg-green-500',
+            'Java': 'bg-red-500',
+            'Go': 'bg-cyan-500',
+            'Vue': 'bg-green-400',
+            'React': 'bg-blue-400',
+            'HTML': 'bg-orange-500',
+            'CSS': 'bg-blue-600',
+            'PHP': 'bg-purple-500',
+            'C++': 'bg-pink-500',
+            'C': 'bg-gray-600',
+            'Shell': 'bg-gray-500',
+            'Dockerfile': 'bg-blue-700',
+            'default': 'bg-gray-400'
+          };
+          return colors[language] || colors.default;
+        }
+      },
+      template: `
+        <div class="text-center animate-fade-in">
+          <div class="mb-16">
+            <div class="w-40 h-40 mx-auto mb-8 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 rounded-3xl flex items-center justify-center text-7xl text-white shadow-2xl animate-float ring-4 ring-white/50">
+              <i class="fas fa-hand-wave text-6xl"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent mb-6 leading-tight">
+              Hello! I'm <span class="relative inline-block">
+                <span class="text-transparent bg-clip-text transition-all duration-300" 
+                     :class="isShowingRandom ? 'bg-gradient-to-r from-red-500 to-orange-500' : 'bg-gradient-to-r from-indigo-600 to-purple-600'">
+                  {{ displayedName }}
+                  <span class="animate-pulse" :class="{ 'opacity-100': isTyping, 'opacity-0': !isTyping }">|</span>
+                </span>
+              </span>
+            </h1>
+            <p class="text-2xl text-gray-600 dark:text-gray-300 mb-12 font-light">
+              <span class="inline-block transform hover:scale-105 transition-all duration-300 px-4 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-gray-700/50 hover:shadow-lg">
+                <i class="fas fa-code mr-2 text-indigo-600"></i>Full-Stack Developer
+              </span> 
+              <span class="mx-2 text-gray-400 dark:text-gray-500">•</span>
+              <span class="inline-block transform hover:scale-105 transition-all duration-300 px-4 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-gray-700/50 hover:shadow-lg">
+                <i class="fas fa-language mr-2 text-green-600"></i>I18n Translator
+              </span> 
+              <span class="mx-2 text-gray-400 dark:text-gray-500">•</span>
+              <span class="inline-block transform hover:scale-105 transition-all duration-300 px-4 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-gray-700/50 hover:shadow-lg">
+                <i class="fas fa-graduation-cap mr-2 text-purple-600"></i>Student
+              </span>
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-6 mb-12">
+              <router-link to="/contact" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-500 font-semibold ring-2 ring-transparent hover:ring-blue-300/50 hover:-translate-y-1">
+                <i class="fas fa-envelope mr-2"></i>Contact Me
+              </router-link>
+              <a v-if="$root.githubData.user" 
+                 :href="$root.githubData.user.html_url" 
+                 target="_blank"
+                 class="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-4 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-500 font-semibold ring-2 ring-transparent hover:ring-gray-400/50 hover:-translate-y-1">
+                <i class="fab fa-github mr-2"></i>GitHub Profile
+              </a>
+              <router-link v-else to="/resume" class="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-4 rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-500 font-semibold ring-2 ring-transparent hover:ring-gray-400/50 hover:-translate-y-1">
+                <i class="fas fa-file-alt mr-2"></i>Resume
+              </router-link>
+            </div>
+          </div>
+
+          <!-- GitHub统计信息 -->
+          <div v-if="$root.githubData.user && !$root.githubData.loading" class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+              <i class="fab fa-github mr-3 text-gray-700 dark:text-gray-300"></i>GitHub Stats
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-6 rounded-2xl shadow-lg text-center border border-blue-200/50 dark:border-blue-700/50">
+                <div class="text-3xl mb-2">
+                  <i class="fas fa-code-branch text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ $root.githubData.user.public_repos }}</div>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Repositories</p>
+              </div>
+              <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-6 rounded-2xl shadow-lg text-center border border-green-200/50 dark:border-green-700/50">
+                <div class="text-3xl mb-2">
+                  <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+                </div>
+                <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">{{ $root.githubData.user.followers }}</div>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Followers</p>
+              </div>
+              <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-6 rounded-2xl shadow-lg text-center border border-purple-200/50 dark:border-purple-700/50">
+                <div class="text-3xl mb-2">
+                  <i class="fas fa-user-plus text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">{{ $root.githubData.user.following }}</div>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Following</p>
+              </div>
+              <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 p-6 rounded-2xl shadow-lg text-center border border-orange-200/50 dark:border-orange-700/50">
+                <div class="text-3xl mb-2">
+                  <i class="fas fa-calendar-alt text-orange-600 dark:text-orange-400"></i>
+                </div>
+                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">{{ new Date($root.githubData.user.created_at).getFullYear() }}</div>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Member Since</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 最新项目展示 -->
+          <div v-if="$root.githubData.repos.length > 0 && !$root.githubData.loading" class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+              <i class="fas fa-laptop-code mr-3 text-gray-700 dark:text-gray-300"></i>Latest Projects
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="repo in $root.githubData.repos.slice(0, 6)" :key="repo.id" 
+                   class="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-white/30 dark:border-gray-700/30 hover:-translate-y-1">
+                <div class="flex items-start justify-between mb-4">
+                  <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    {{ repo.name }}
+                  </h3>
+                  <div v-if="repo.language" class="ml-4 flex items-center space-x-2">
+                    <div class="w-4 h-4 rounded-full" :class="getLanguageColor(repo.language)"></div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ repo.language }}</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                  {{ repo.description || 'No description available' }}
+                </p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                    <span v-if="repo.stargazers_count > 0" class="flex items-center">
+                      <i class="fas fa-star text-yellow-500 mr-1"></i>{{ repo.stargazers_count }}
+                    </span>
+                    <span v-if="repo.forks_count > 0" class="flex items-center">
+                      <i class="fas fa-code-branch text-blue-500 mr-1"></i>{{ repo.forks_count }}
+                    </span>
+                  </div>
+                  <a :href="repo.html_url" target="_blank" 
+                     class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium text-sm hover:underline flex items-center">
+                    <i class="fas fa-external-link-alt mr-1"></i>View
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 加载状态 -->
+          <div v-if="$root.githubData.loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent"></div>
+            <p class="mt-4 text-gray-600 dark:text-gray-300">
+              <i class="fas fa-spinner fa-spin mr-2"></i>Loading GitHub data...
+            </p>
+          </div>
+
+          <!-- 错误状态 -->
+          <div v-if="$root.githubData.error" class="text-center py-12">
+            <div class="text-red-500 dark:text-red-400 text-lg mb-2">
+              <i class="fas fa-exclamation-triangle mr-2"></i>Error loading GitHub data
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">{{ $root.githubData.error }}</p>
+          </div>
+
+          <!-- 特色介绍 -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div class="group bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-800/30 p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-blue-200/50 dark:border-blue-700/50 hover:-translate-y-2 hover:scale-105">
+              <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-laptop-code"></i>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Full-Stack Developer</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-lg">Modern framework and language</p>
+            </div>
+            <div class="group bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-800/30 p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-purple-200/50 dark:border-purple-700/50 hover:-translate-y-2 hover:scale-105">
+              <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 text-purple-600 dark:text-purple-400">
+                <i class="fas fa-language"></i>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">I18n Translator</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-lg">Mandarin, English and Japanese</p>
+            </div>
+            <div class="group bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/30 p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-green-200/50 dark:border-green-700/50 hover:-translate-y-2 hover:scale-105">
+              <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 text-green-600 dark:text-green-400">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Student</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-lg">IB Diploma</p>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const About = {
+      template: `
+        <div class="animate-fade-in">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('about.title') }}</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+          </div>
+          
+          <div class="max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+              <div class="lg:col-span-2">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ $root.t('about.personal') }}</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                  {{ $root.t('about.personalDesc1') }}
+                </p>
+                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                  {{ $root.t('about.personalDesc2') }}
+                </p>
+              </div>
+              
+              <div class="space-y-6">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-800/30 p-6 rounded-xl border border-blue-200 dark:border-blue-700/50">
+                  <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">{{ $root.t('about.basedIn') }}</h3>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.location') }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 兴趣爱好 -->
+            <div class="mb-12">
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">{{ $root.t('about.hobbies') }}</h2>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+                  <div class="text-3xl mb-2">💻</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('about.hobbyList.programming') }}</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+                  <div class="text-3xl mb-2">📸</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('about.hobbyList.photography') }}</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+                  <div class="text-3xl mb-2">🎮</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('about.hobbyList.gaming') }}</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+                  <div class="text-3xl mb-2">✈️</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('about.hobbyList.aviation') }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 教育经历 -->
+            <div class="mb-12">
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">{{ $root.t('about.education') }}</h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-green-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.educationList.nucb.school') }}</h3>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $root.t('about.educationList.nucb.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300 mb-2">{{ $root.t('about.educationList.nucb.program') }}</p>
+                </div>
+                
+                <div class="border-l-4 border-yellow-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.educationList.koujimachi.school') }}</h3>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $root.t('about.educationList.koujimachi.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.educationList.koujimachi.program') }}</p>
+                </div>
+
+                <div class="border-l-4 border-red-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.educationList.shangde.school') }}</h3>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $root.t('about.educationList.shangde.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.educationList.shangde.program') }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 工作经历 -->
+            <div class="mb-12">
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">{{ $root.t('about.experience') }}</h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-blue-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
+                    <div>
+                      <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.experienceList.ana.title') }}</h3>
+                      <p class="text-indigo-600 dark:text-indigo-400 font-medium">{{ $root.t('about.experienceList.ana.company') }}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 md:text-right">{{ $root.t('about.experienceList.ana.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.experienceList.ana.desc') }}</p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
+                    <div>
+                      <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.experienceList.mcs.title') }}</h3>
+                      <p class="text-green-600 dark:text-green-400 font-medium">{{ $root.t('about.experienceList.mcs.company') }}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 md:text-right">{{ $root.t('about.experienceList.mcs.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.experienceList.mcs.desc') }}</p>
+                </div>
+
+                <div class="border-l-4 border-purple-500 pl-6 py-4">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
+                    <div>
+                      <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.experienceList.teco.title') }}</h3>
+                      <p class="text-purple-600 dark:text-purple-400 font-medium">{{ $root.t('about.experienceList.teco.company') }}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 md:text-right">{{ $root.t('about.experienceList.teco.period') }}</span>
+                  </div>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.experienceList.teco.desc') }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const Projects = {
+      template: `
+        <div class="animate-fade-in">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('projects.title') }}</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mb-4"></div>
+            <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              {{ $root.t('projects.subtitle') }}
+            </p>
+          </div>
+          
+          <!-- GitHub统计概览 -->
+          <div v-if="$root.githubData.user && !$root.githubData.loading" class="mb-12">
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-100 dark:from-indigo-900/30 dark:to-purple-800/30 rounded-3xl p-8 border border-indigo-200/50 dark:border-indigo-700/50">
+              <div class="flex items-center justify-center mb-6">
+                <img :src="$root.githubData.user.avatar_url" 
+                     :alt="$root.githubData.user.name" 
+                     class="w-20 h-20 rounded-full ring-4 ring-white dark:ring-gray-600 shadow-lg">
+                <div class="ml-6">
+                  <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $root.githubData.user.name || $root.githubData.user.login }}</h2>
+                  <p class="text-gray-600 dark:text-gray-300">{{ $root.githubData.user.bio || 'GitHub Developer' }}</p>
+                  <a :href="$root.githubData.user.html_url" target="_blank" 
+                     class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium text-sm">
+                    @{{ $root.githubData.user.login }} →
+                  </a>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $root.githubData.user.public_repos }}</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('projects.repositories') }}</p>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $root.githubData.user.followers }}</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('projects.followers') }}</p>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ $root.githubData.user.following }}</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('projects.following') }}</p>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">{{ new Date($root.githubData.user.created_at).getFullYear() }}</div>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('projects.memberSince') }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 项目列表 -->
+          <div v-if="$root.githubData.repos.length > 0 && !$root.githubData.loading">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">{{ $root.t('projects.repositoryShowcase') }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div v-for="repo in $root.githubData.repos.slice(0, 6)" :key="repo.id" 
+                   class="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/30 dark:border-gray-700/30 hover:-translate-y-2">
+                
+                <!-- 项目头部 -->
+                <div class="flex items-start justify-between mb-6">
+                  <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      {{ repo.name }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                      {{ repo.description || $root.t('common.noDescription') }}
+                    </p>
+                  </div>
+                  <div v-if="repo.language" class="ml-4 flex items-center space-x-2">
+                    <div class="w-4 h-4 rounded-full" :class="getLanguageColor(repo.language)"></div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">{{ repo.language }}</span>
+                  </div>
+                </div>
+
+                <!-- 项目统计 -->
+                <div class="flex items-center space-x-6 mb-6 text-sm text-gray-500 dark:text-gray-400">
+                  <div class="flex items-center space-x-1">
+                    <span>⭐</span>
+                    <span>{{ repo.stargazers_count }}</span>
+                  </div>
+                  <div class="flex items-center space-x-1">
+                    <span>🔀</span>
+                    <span>{{ repo.forks_count }}</span>
+                  </div>
+                  <div class="flex items-center space-x-1">
+                    <span>📝</span>
+                    <span>{{ formatBytes(repo.size * 1024) }}</span>
+                  </div>
+                  <div class="flex items-center space-x-1">
+                    <span>🕒</span>
+                    <span>{{ formatDate(repo.updated_at) }}</span>
+                  </div>
+                </div>
+
+                <!-- 项目主题标签 -->
+                <div v-if="repo.topics && repo.topics.length > 0" class="mb-6">
+                  <div class="flex flex-wrap gap-2">
+                    <span v-for="topic in repo.topics.slice(0, 5)" :key="topic"
+                          class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 rounded-full text-xs font-medium">
+                      {{ topic }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex space-x-4">
+                  <a :href="repo.html_url" target="_blank" 
+                     class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-3 px-4 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
+                    {{ $root.t('projects.viewCode') }}
+                  </a>
+                  <a v-if="repo.homepage" :href="repo.homepage" target="_blank" 
+                     class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-center py-3 px-4 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
+                    {{ $root.t('projects.livDemo') }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 加载状态 -->
+          <div v-if="$root.githubData.loading" class="text-center py-16">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-indigo-500 border-t-transparent mb-4"></div>
+            <p class="text-xl text-gray-600 dark:text-gray-300">{{ $root.t('projects.loading') }}</p>
+          </div>
+
+          <!-- 错误状态 -->
+          <div v-if="$root.githubData.error" class="text-center py-16">
+            <div class="text-6xl mb-6">😔</div>
+            <div class="text-red-500 dark:text-red-400 text-2xl mb-4">{{ $root.t('projects.failed') }}</div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">{{ $root.githubData.error }}</p>
+            <button @click="$root.fetchGitHubData()" 
+                    class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
+              {{ $root.t('projects.tryAgain') }}
+            </button>
+          </div>
+
+          <!-- 无数据状态 -->
+          <div v-if="!$root.githubData.loading && !$root.githubData.error && $root.githubData.repos.length === 0" class="text-center py-16">
+            <div class="text-6xl mb-6">📭</div>
+            <div class="text-gray-500 dark:text-gray-400 text-xl mb-4">{{ $root.t('projects.noRepos') }}</div>
+            <p class="text-gray-600 dark:text-gray-300">{{ $root.t('projects.checkLater') }}</p>
+          </div>
+        </div>
+      `,
+      methods: {
+        formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+          });
+        },
+        formatBytes(bytes) {
+          if (bytes === 0) return '0 Bytes';
+          const k = 1024;
+          const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        },
+        getLanguageColor(language) {
+          const colors = {
+            'JavaScript': 'bg-yellow-400',
+            'TypeScript': 'bg-blue-500',
+            'Python': 'bg-green-500',
+            'Java': 'bg-red-500',
+            'Go': 'bg-cyan-500',
+            'Vue': 'bg-green-400',
+            'React': 'bg-blue-400',
+            'HTML': 'bg-orange-500',
+            'CSS': 'bg-blue-600',
+            'PHP': 'bg-purple-500',
+            'C++': 'bg-pink-500',
+            'C': 'bg-gray-600',
+            'Shell': 'bg-gray-500',
+            'Dockerfile': 'bg-blue-700',
+            'default': 'bg-gray-400'
+          };
+          return colors[language] || colors.default;
+        }
+      }
+    };
+
+    const Contact = {
+      data() {
+        return {
+          form: {
+            name: '',
+            email: '',
+            subject: '',
+            message: ''
+          }
+        }
+      },
+      methods: {
+        submitForm() {
+          const thanksMessage = this.$root.t('contact.form.thanks').replace('{name}', this.form.name);
+          alert(thanksMessage);
+          this.form = { name: '', email: '', subject: '', message: '' };
+        }
+      },
+      template: `
+        <div class="animate-fade-in">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('contact.title') }}</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mb-4"></div>
+            <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              {{ $root.t('contact.subtitle') }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 联系信息 -->
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('contact.contactInfo') }}</h2>
+              
+              <div class="space-y-6 mb-8">
+                <div class="flex items-center p-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20">
+                  <div class="text-2xl mr-4">📧</div>
+                  <div>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.email') }}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">ja@jhl.hk</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center p-4 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20">
+                  <div class="text-2xl mr-4">📍</div>
+                  <div>
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.location') }}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Nisshin, Aichi, Japan</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 社交媒体 -->
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('contact.socialMedia') }}</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  <span class="text-2xl mr-2">💼</span>
+                  {{ $root.t('common.linkedin') }}
+                </a>
+                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  <span class="text-2xl mr-2">📂</span>
+                  {{ $root.t('common.github') }}
+                </a>
+                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  <span class="text-2xl mr-2">🐦</span>
+                  {{ $root.t('common.twitter') }}
+                </a>
+                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  <span class="text-2xl mr-2">💬</span>
+                  {{ $root.t('common.wechat') }}
+                </a>
+              </div>
+            </div>
+
+            <!-- 联系表单 -->
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('contact.sendMessage') }}</h2>
+              
+              <form @submit.prevent="submitForm" class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-white/20 dark:border-gray-700/20">
+                <div class="mb-6">
+                  <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ $root.t('contact.form.name') }}</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    v-model="form.name" 
+                    required
+                    class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-200 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700"
+                    :placeholder="$root.t('contact.form.namePlaceholder')">
+                </div>
+                
+                <div class="mb-6">
+                  <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ $root.t('contact.form.email') }}</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    v-model="form.email" 
+                    required
+                    class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-200 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700"
+                    :placeholder="$root.t('contact.form.emailPlaceholder')">
+                </div>
+                
+                <div class="mb-6">
+                  <label for="subject" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ $root.t('contact.form.subject') }}</label>
+                  <input 
+                    type="text" 
+                    id="subject" 
+                    v-model="form.subject"
+                    class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-200 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700"
+                    :placeholder="$root.t('contact.form.subjectPlaceholder')">
+                </div>
+                
+                <div class="mb-8">
+                  <label for="message" class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ $root.t('contact.form.message') }}</label>
+                  <textarea 
+                    id="message" 
+                    v-model="form.message" 
+                    rows="5" 
+                    required
+                    class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-200 resize-none text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700"
+                    :placeholder="$root.t('contact.form.messagePlaceholder')"></textarea>
+                </div>
+                
+                <button 
+                  type="submit" 
+                  class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 px-8 rounded-lg hover:from-indigo-600 hover:to-purple-700 hover:shadow-lg hover:scale-105 transition-all duration-300">
+                  {{ $root.t('contact.form.send') }}
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- 额外信息 -->
+          <div class="mt-16 text-center p-8 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-800/30 rounded-2xl border border-indigo-200 dark:border-indigo-700/50">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">{{ $root.t('contact.cooperation') }}</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+              {{ $root.t('contact.cooperationDesc') }}
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <div class="bg-white/50 dark:bg-gray-800/50 p-4 rounded-xl">
+                <div class="text-2xl mb-2">🚀</div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.development') }}</h3>
+              </div>
+              <div class="bg-white/50 dark:bg-gray-800/50 p-4 rounded-xl">
+                <div class="text-2xl mb-2">🎓</div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.consultation') }}</h3>
+              </div>
+              <div class="bg-white/50 dark:bg-gray-800/50 p-4 rounded-xl">
+                <div class="text-2xl mb-2">👥</div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.sharing') }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const Skills = {
+      template: `
+        <div class="animate-fade-in">
+          <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('skills.title') }}</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mb-4"></div>
+            <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              {{ $root.t('skills.subtitle') }}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Frontend技能 -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-gray-700/30">
+              <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+                <span class="text-3xl mr-3">🎨</span>
+                {{ $root.t('skills.frontend') }}
+              </h2>
+              <div class="space-y-4">
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">HTML/CSS</span>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">98%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-blue-500 to-cyan-500" style="width: 98%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">React/Next.js</span>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">85%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-blue-500 to-indigo-500" style="width: 85%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">CSS/Tailwind</span>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">80%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-cyan-500 to-teal-500" style="width: 80%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">JavaScript/TypeScript</span>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">70%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-yellow-500 to-orange-500" style="width: 70%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">Vue/Nuxt/Svelte</span>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">65%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-green-500 to-emerald-500" style="width: 65%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Backend技能 -->
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-gray-700/30">
+              <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+                <span class="text-3xl mr-3">⚙️</span>
+                {{ $root.t('skills.backend') }}
+              </h2>
+              <div class="space-y-4">
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">MySQL</span>
+                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">90%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-purple-500 to-pink-500" style="width: 90%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">Node.js</span>
+                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">80%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-green-600 to-lime-500" style="width: 80%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">Python</span>
+                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">80%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-blue-600 to-yellow-500" style="width: 80%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">PostgreSQL</span>
+                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">50%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-indigo-500 to-blue-600" style="width: 50%;"></div>
+                  </div>
+                </div>
+                
+                <div class="skill-item">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-gray-800 dark:text-gray-100">Go</span>
+                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">30%</span>
+                  </div>
+                  <div class="skill-bar">
+                    <div class="skill-progress bg-gradient-to-r from-cyan-500 to-blue-500" style="width: 30%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GitHub语言统计 -->
+          <div v-if="$root.githubData.repos.length > 0 && !$root.githubData.loading" class="md:col-span-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-gray-700/30">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+              <span class="text-3xl mr-3">📊</span>
+              {{ $root.t('skills.githubStats') }}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- 语言使用饼图 -->
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">{{ $root.t('skills.mostUsed') }}</h3>
+                <div class="space-y-3">
+                  <div v-for="lang in getTopLanguages()" :key="lang.name" class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-4 h-4 rounded-full" :class="getLanguageColor(lang.name)"></div>
+                      <span class="font-medium text-gray-800 dark:text-gray-100">{{ lang.name }}</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div class="w-20 h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                        <div class="h-full transition-all duration-1000 ease-out" 
+                             :class="getLanguageColor(lang.name)" 
+                             :style="{ width: lang.percentage + '%' }"></div>
+                      </div>
+                      <span class="text-sm text-gray-600 dark:text-gray-300 w-10 text-right">{{ lang.count }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 仓库统计 -->
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">{{ $root.t('skills.repoStats') }}</h3>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-4 rounded-2xl text-center border border-blue-200/50 dark:border-blue-700/50">
+                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $root.githubData.repos.length }}</div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('skills.totalRepos') }}</p>
+                  </div>
+                  <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-4 rounded-2xl text-center border border-green-200/50 dark:border-green-700/50">
+                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ getTotalStars() }}</div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('skills.totalStars') }}</p>
+                  </div>
+                  <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-4 rounded-2xl text-center border border-purple-200/50 dark:border-purple-700/50">
+                    <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ getTotalForks() }}</div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('skills.totalForks') }}</p>
+                  </div>
+                  <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 p-4 rounded-2xl text-center border border-orange-200/50 dark:border-orange-700/50">
+                    <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ getUniqueLanguages() }}</div>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $root.t('skills.languages') }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      methods: {
+        getTopLanguages() {
+          if (!this.$root.githubData.repos.length) return [];
+          
+          const languageCount = {};
+          this.$root.githubData.repos.forEach(repo => {
+            if (repo.language) {
+              languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
+            }
+          });
+          
+          const sortedLanguages = Object.entries(languageCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 8)
+            .map(([name, count]) => ({
+              name,
+              count,
+              percentage: Math.round((count / this.$root.githubData.repos.length) * 100)
+            }));
+          
+          return sortedLanguages;
+        },
+        getTotalStars() {
+          return this.$root.githubData.repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+        },
+        getTotalForks() {
+          return this.$root.githubData.repos.reduce((sum, repo) => sum + repo.forks_count, 0);
+        },
+        getUniqueLanguages() {
+          const languages = new Set(this.$root.githubData.repos.map(repo => repo.language).filter(Boolean));
+          return languages.size;
+        },
+        getLanguageColor(language) {
+          const colors = {
+            'JavaScript': 'bg-yellow-400',
+            'TypeScript': 'bg-blue-500',
+            'Python': 'bg-green-500',
+            'Java': 'bg-red-500',
+            'Go': 'bg-cyan-500',
+            'Vue': 'bg-green-400',
+            'React': 'bg-blue-400',
+            'HTML': 'bg-orange-500',
+            'CSS': 'bg-blue-600',
+            'PHP': 'bg-purple-500',
+            'C++': 'bg-pink-500',
+            'C': 'bg-gray-600',
+            'Shell': 'bg-gray-500',
+            'Dockerfile': 'bg-blue-700',
+            'default': 'bg-gray-400'
+          };
+          return colors[language] || colors.default;
+        }
+      }
+    };
+
+    // 定义路由
+    const routes = [
+      { path: '/', component: Home },
+      { path: '/about', component: About },
+      { path: '/projects', component: Projects },
+      { path: '/skills', component: Skills },
+      { path: '/contact', component: Contact },
+      { path: '/:pathMatch(.*)*', redirect: '/' }
+    ];
+
+    // 创建路由器
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    // 创建Vue应用
+    const app = createApp({
+      data() {
+        return {
+          mobileMenuOpen: false,
+          darkMode: false,
+          githubData: {
+            user: null,
+            repos: [],
+            loading: false,
+            error: null
+          },
+          translations: {
+            // Navigation
+            nav: {
+              home: 'Home',
+              about: 'About', 
+              projects: 'Projects',
+              skills: 'Skills',
+              contact: 'Contact'
+            },
+            // Home page
+            home: {
+              greeting: 'Hello! I\'m',
+              roles: {
+                developer: 'Full-Stack Developer',
+                translator: 'I18n Translator', 
+                student: 'Student'
+              },
+              buttons: {
+                contact: '📧 Contact Me',
+                github: '📂 GitHub Profile',
+                resume: '📄 Resume'
+              },
+              githubStats: '🚀 GitHub Stats',
+              latestProjects: '💻 Latest Projects',
+              loading: 'Loading GitHub data...',
+              error: '⚠️ Error loading GitHub data',
+              features: {
+                developer: {
+                  title: 'Full-Stack Developer',
+                  desc: 'Modern framework and language'
+                },
+                translator: {
+                  title: 'I18n Translator', 
+                  desc: 'Mandarin, English and Japanese'
+                },
+                student: {
+                  title: 'Student',
+                  desc: 'IB Diploma'
+                }
+              }
+            },
+            // About page
+            about: {
+              title: 'About Me',
+              personal: 'Personal Information',
+              personalDesc1: 'Current international baccalaureate diploma student, studying in Japan.',
+              personalDesc2: 'I am a active contributor in multiple communities with passion in technology and language. Learning new things and sharing my knowledge with others.',
+              basedIn: '📍 Based in',
+              location: 'Nisshin, Aichi, Japan',
+              hobbies: 'Hobbies',
+              hobbyList: {
+                programming: 'Programming',
+                photography: 'Photography', 
+                gaming: 'Gaming',
+                aviation: 'Aviation'
+              },
+              education: 'Education',
+              experience: 'Experience',
+              educationList: {
+                nucb: {
+                  school: 'NUCB International College',
+                  program: 'International Baccalaureate Diploma',
+                  period: 'March, 2024 - Present'
+                },
+                koujimachi: {
+                  school: 'Koujimachi Junior High School',
+                  program: 'Public Junior High School in Japan',
+                  period: 'September, 2022 - March, 2024'
+                },
+                shangde: {
+                  school: 'Shanghai Shangde Experimental School',
+                  program: 'International Baccalaureate Middle Years Programme',
+                  period: 'September, 2019 - June, 2022'
+                }
+              },
+              experienceList: {
+                ana: {
+                  title: 'Chief Technology Officer',
+                  company: 'ANA Virtual Group (anavirtualgroup.com)',
+                  desc: 'Developing and maintaining websites and applications.',
+                  period: '2025 - Present'
+                },
+                mcs: {
+                  title: 'Community Moderator & Contributor',
+                  company: 'MCSManager (mcsmanager.com)',
+                  desc: 'Moderating and contributing to the community as a volunteer. Most contributions are in the form of translations.',
+                  period: '2024 - Present'
+                },
+                teco: {
+                  title: 'Director of Technical Division',
+                  company: 'TecoStudio (tecostudio.cn)',
+                  desc: 'Focusing on developing website.',
+                  period: '2023 - Present'
+                }
+              }
+            },
+            // Projects page
+            projects: {
+              title: 'Projects',
+              subtitle: 'Here are my open source projects and contributions on GitHub.',
+              repositories: 'Repositories',
+              followers: 'Followers',
+              following: 'Following',
+              memberSince: 'Member Since',
+              repositoryShowcase: '📂 Repository Showcase',
+              viewCode: 'View Code',
+              livDemo: 'Live Demo',
+              loading: 'Loading projects from GitHub...',
+              failed: 'Failed to load GitHub data',
+              tryAgain: 'Try Again',
+              noRepos: 'No repositories found',
+              checkLater: 'Check back later for updates!'
+            },
+            // Skills page 
+            skills: {
+              title: 'Technical Skills',
+              subtitle: 'My technical expertise across various programming languages, frameworks, and tools.',
+              frontend: 'Frontend Development',
+              backend: 'Backend Development',
+              githubStats: 'GitHub Language Distribution',
+              mostUsed: 'Most Used Languages',
+              repoStats: 'Repository Stats',
+              totalRepos: 'Total Repos',
+              totalStars: 'Total Stars',
+              totalForks: 'Total Forks',
+              languages: 'Languages'
+            },
+            // Contact page
+            contact: {
+              title: 'Contact Me',
+              subtitle: 'I\'m glad to be able to communicate with you! Whether it\'s project cooperation, technical discussion, or a simple greeting, I look forward to hearing your voice.',
+              contactInfo: '📞 Contact Information',
+              email: 'Email',
+              location: 'Location',
+              socialMedia: '🌐 Social Media',
+              sendMessage: '✉️ Send Message',
+              form: {
+                name: 'Name *',
+                email: 'Email *',
+                subject: 'Subject',
+                message: 'Message *',
+                namePlaceholder: 'Please enter your name',
+                emailPlaceholder: 'Please enter your email address',
+                subjectPlaceholder: 'Please enter the subject of your message',
+                messagePlaceholder: 'Please enter your message...',
+                send: 'Send Message',
+                thanks: 'Thank you for your message, {name}! I will reply to you within 24 hours.'
+              },
+              cooperation: '💡 Cooperation Opportunities',
+              cooperationDesc: 'I am currently open to the following types of cooperation opportunities:',
+              cooperationTypes: {
+                development: 'Project Development',
+                consultation: 'Technical Consultation',
+                sharing: 'Technical Sharing'
+              }
+            },
+            // Common
+            common: {
+              view: 'View →',
+              noDescription: 'No description available',
+              github: 'GitHub',
+              linkedin: 'LinkedIn', 
+              twitter: 'Twitter',
+              wechat: 'WeChat'
+            }
+          }
+        }
+      },
+      async mounted() {
+        this.initDarkMode();
+        await this.fetchGitHubData();
+      },
+      methods: {
+        // 获取翻译文本
+        t(key) {
+          const keys = key.split('.');
+          let value = this.translations;
+          
+          for (const k of keys) {
+            if (value && typeof value === 'object' && k in value) {
+              value = value[k];
+            } else {
+              return key; // 如果没找到，返回key本身
+            }
+          }
+          
+          return value || key;
+        },
+        
+        changeLanguage(lang) {
+          this.currentLanguage = lang;
+          localStorage.setItem('preferredLanguage', lang);
+          document.documentElement.lang = lang;
+        },
+        
+        initLanguage() {
+          // 检查本地存储的语言偏好
+          const savedLang = localStorage.getItem('preferredLanguage');
+          if (savedLang && this.translations[savedLang]) {
+            this.currentLanguage = savedLang;
+          } else {
+            // 检测浏览器语言
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('zh')) {
+              this.currentLanguage = 'zh';
+            } else if (browserLang.startsWith('ja')) {
+              this.currentLanguage = 'ja';
+            } else {
+              this.currentLanguage = 'en';
+            }
+          }
+          document.documentElement.lang = this.currentLanguage;
+        },
+
+        async fetchGitHubData() {
+          this.githubData.loading = true;
+          this.githubData.error = null;
+          
+          try {
+            const username = 'jhl-hk'; // 你的GitHub用户名
+            
+            // 获取用户信息
+            console.log('Fetching GitHub user data for:', username);
+            const userResponse = await fetch(`https://api.github.com/users/${username}`);
+            console.log('User response status:', userResponse.status);
+            
+            if (!userResponse.ok) {
+              if (userResponse.status === 404) {
+                throw new Error(`GitHub user '${username}' not found`);
+              } else if (userResponse.status === 403) {
+                throw new Error('GitHub API rate limit exceeded');
+              } else {
+                throw new Error(`Failed to fetch user data: ${userResponse.status}`);
+              }
+            }
+            
+            this.githubData.user = await userResponse.json();
+            console.log('User data loaded:', this.githubData.user);
+            
+            // 获取仓库信息
+            console.log('Fetching repositories...');
+            const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=20`);
+            console.log('Repos response status:', reposResponse.status);
+            
+            if (!reposResponse.ok) {
+              if (reposResponse.status === 403) {
+                throw new Error('GitHub API rate limit exceeded');
+              } else {
+                throw new Error(`Failed to fetch repos data: ${reposResponse.status}`);
+              }
+            }
+            
+            this.githubData.repos = await reposResponse.json();
+            console.log('Repositories loaded:', this.githubData.repos.length, 'repos');
+            
+          } catch (error) {
+            console.error('GitHub API Error:', error);
+            this.githubData.error = error.message;
+          } finally {
+            this.githubData.loading = false;
+          }
+        },
+        getLanguageColor(language) {
+          const colors = {
+            'JavaScript': 'bg-yellow-400',
+            'TypeScript': 'bg-blue-500',
+            'Python': 'bg-green-500',
+            'Java': 'bg-red-500',
+            'Go': 'bg-cyan-500',
+            'Vue': 'bg-green-400',
+            'React': 'bg-blue-400',
+            'HTML': 'bg-orange-500',
+            'CSS': 'bg-blue-600',
+            'PHP': 'bg-purple-500',
+            'C++': 'bg-pink-500',
+            'C': 'bg-gray-600',
+            'Shell': 'bg-gray-500',
+            'Dockerfile': 'bg-blue-700',
+            'default': 'bg-gray-400'
+          };
+          return colors[language] || colors.default;
+        },
+        initDarkMode() {
+          // 检查本地存储或系统偏好
+          const savedMode = localStorage.getItem('darkMode');
+          if (savedMode !== null) {
+            this.darkMode = savedMode === 'true';
+          } else {
+            // 检测系统主题
+            this.darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+          this.updateTheme();
+          
+          // 监听系统主题变化
+          if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+              if (localStorage.getItem('darkMode') === null) {
+                this.darkMode = e.matches;
+                this.updateTheme();
+              }
+            });
+          }
+        },
+        toggleDarkMode() {
+          this.darkMode = !this.darkMode;
+          localStorage.setItem('darkMode', this.darkMode);
+          this.updateTheme();
+        },
+        updateTheme() {
+          if (this.darkMode) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+      }
+    });
+
+    // 使用路由器
+    app.use(router);
+
+    // 挂载应用
+    app.mount('#app');
+  </script>
+</body>
+</html>
