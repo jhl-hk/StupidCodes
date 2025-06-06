@@ -1,4 +1,4 @@
-# Stupied Codes
+# Stupid Codes
 
 > This repo contains all the practice and thoes useless codes. Formarly it was the school information class works.
 
