@@ -581,8 +581,14 @@
       template: `
         <div class="text-center animate-fade-in">
           <div class="mb-16">
-            <div class="w-40 h-40 mx-auto mb-8 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 rounded-3xl flex items-center justify-center text-7xl text-white shadow-2xl animate-float ring-4 ring-white/50">
-              <i class="fas fa-hand-wave text-6xl"></i>
+            <div class="w-40 h-40 mx-auto mb-8 shadow-2xl animate-float ring-4 ring-white/50 rounded-3xl overflow-hidden">
+              <img v-if="$root.githubData.user" 
+                   :src="$root.githubData.user.avatar_url" 
+                   :alt="$root.githubData.user.name || $root.githubData.user.login"
+                   class="w-full h-full object-cover">
+              <div v-else class="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 flex items-center justify-center text-white">
+                <i class="fas fa-hand-wave text-6xl"></i>
+              </div>
             </div>
             <h1 class="text-5xl md:text-7xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent mb-6 leading-tight">
               Hello! I'm <span class="relative inline-block">
@@ -827,16 +833,6 @@
             <div class="mb-12">
               <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">{{ $root.t('about.experience') }}</h2>
               <div class="space-y-6">
-                <div class="border-l-4 border-blue-500 pl-6 py-4">
-                  <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
-                    <div>
-                      <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('about.experienceList.ana.title') }}</h3>
-                      <p class="text-indigo-600 dark:text-indigo-400 font-medium">{{ $root.t('about.experienceList.ana.company') }}</p>
-                    </div>
-                    <span class="text-sm text-gray-500 dark:text-gray-400 md:text-right">{{ $root.t('about.experienceList.ana.period') }}</span>
-                  </div>
-                  <p class="text-gray-600 dark:text-gray-300">{{ $root.t('about.experienceList.ana.desc') }}</p>
-                </div>
 
                 <div class="border-l-4 border-green-500 pl-6 py-4">
                   <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-2">
@@ -1101,22 +1097,26 @@
               <!-- 社交媒体 -->
               <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">{{ $root.t('contact.socialMedia') }}</h2>
               <div class="grid grid-cols-2 gap-4">
-                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                <a :href="$root.t('common.linkedin.url')" target="_blank" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
                   <span class="text-2xl mr-2">💼</span>
-                  {{ $root.t('common.linkedin') }}
+                  {{ $root.t('common.linkedin.name') }}
                 </a>
-                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                <a :href="$root.t('common.github.url')" target="_blank" class="flex items-center justify-center p-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
                   <span class="text-2xl mr-2">📂</span>
-                  {{ $root.t('common.github') }}
+                  {{ $root.t('common.github.name') }}
                 </a>
-                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                <a :href="$root.t('common.twitter.url')" target="_blank" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
                   <span class="text-2xl mr-2">🐦</span>
-                  {{ $root.t('common.twitter') }}
+                  {{ $root.t('common.twitter.name') }}
                 </a>
-                <a href="#" class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
+                <a v-if="$root.t('common.wechat.url') !== '#'" :href="$root.t('common.wechat.url')" target="_blank" class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300">
                   <span class="text-2xl mr-2">💬</span>
-                  {{ $root.t('common.wechat') }}
+                  {{ $root.t('common.wechat.name') }}
                 </a>
+                <div v-else class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl opacity-50 cursor-not-allowed">
+                  <span class="text-2xl mr-2">💬</span>
+                  {{ $root.t('common.wechat.name') }}
+                </div>
               </div>
             </div>
 
@@ -1189,12 +1189,12 @@
                 <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.development') }}</h3>
               </div>
               <div class="bg-white/50 dark:bg-gray-800/50 p-4 rounded-xl">
-                <div class="text-2xl mb-2">🎓</div>
-                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.consultation') }}</h3>
+                <div class="text-2xl mb-2">🌍</div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.translation') }}</h3>
               </div>
               <div class="bg-white/50 dark:bg-gray-800/50 p-4 rounded-xl">
-                <div class="text-2xl mb-2">👥</div>
-                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.sharing') }}</h3>
+                <div class="text-2xl mb-2">💡</div>
+                <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ $root.t('contact.cooperationTypes.other') }}</h3>
               </div>
             </div>
           </div>
@@ -1546,12 +1546,6 @@
                 }
               },
               experienceList: {
-                ana: {
-                  title: 'Chief Technology Officer',
-                  company: 'ANA Virtual Group (anavirtualgroup.com)',
-                  desc: 'Developing and maintaining websites and applications.',
-                  period: '2025 - Present'
-                },
                 mcs: {
                   title: 'Community Moderator & Contributor',
                   company: 'MCSManager (mcsmanager.com)',
@@ -1622,18 +1616,30 @@
               cooperationDesc: 'I am currently open to the following types of cooperation opportunities:',
               cooperationTypes: {
                 development: 'Project Development',
-                consultation: 'Technical Consultation',
-                sharing: 'Technical Sharing'
+                translation: 'Project Translation',
+                other: 'Other'
               }
             },
             // Common
             common: {
               view: 'View →',
               noDescription: 'No description available',
-              github: 'GitHub',
-              linkedin: 'LinkedIn', 
-              twitter: 'Twitter',
-              wechat: 'WeChat'
+              github: {
+                name: 'GitHub',
+                url: 'https://github.com/jhl-hk'
+              },
+              linkedin: {
+                name: 'LinkedIn',
+                url: 'https://www.linkedin.com/in/jianyuehugoliang/'
+              },
+              twitter: {
+                name: 'Twitter',
+                url: 'https://x.com/jianyuehugo'
+              },
+              wechat: {
+                name: 'WeChat',
+                url: '#'
+              }
             }
           }
         }
