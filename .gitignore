@@ -161,3 +161,4 @@ atm_data.json
 tasks.json
 
 *.class
+.idea/
