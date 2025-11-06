@@ -167,3 +167,5 @@ storage/
 
 atm_data.json
 tasks.json
+
+*.class
